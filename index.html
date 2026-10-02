@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport Exhaustif UI/UX & Correctifs - LJERE360</title>
+    <style>
+        :root {
+            --primary: #1a237e;
+            --secondary: #3f51b5;
+            --bg: #f4f6f8;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #e0e0e0;
+            --critical: #c62828;
+            --critical-bg: #ffebee;
+            --major: #ef6c00;
+            --major-bg: #fff3e0;
+            --minor: #2e7d32;
+            --minor-bg: #e8f5e9;
+            --info: #0277bd;
+            --info-bg: #e1f5fe;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: var(--primary);
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: var(--secondary);
+            margin-top: 40px;
+            border-left: 5px solid var(--secondary);
+            padding-left: 15px;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 0 4px 4px 0;
+        }
+        h3 {
+            color: var(--primary);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        .card {
+            background: #fafafa;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: box-shadow 0.2s;
+        }
+        .card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .badge-critical { background: var(--critical-bg); color: var(--critical); }
+        .badge-major { background: var(--major-bg); color: var(--major); }
+        .badge-minor { background: var(--minor-bg); color: var(--minor); }
+        .badge-info { background: var(--info-bg); color: var(--info); }
+        
+        /* Simulations UI */
+        .ui-sim {
+            background: #fff;
+            border: 1px solid #cfd8dc;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: sans-serif;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .ui-sim-header {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .ui-btn {
+            background: var(--secondary);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .ui-btn:hover { background: var(--primary); }
+        .ui-btn-outline {
+            background: transparent;
+            color: var(--secondary);
+            border: 1px solid var(--secondary);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .ui-btn-outline:hover { background: #f0f2ff; }
+        .ui-btn-green {
+            background: #2e7d32;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .ui-alert {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            color: #5d4037;
+            font-size: 14px;
+            border-radius: 0 4px 4px 0;
+        }
+        .ui-alert-danger {
+            background: #ffebee;
+            border-left: 4px solid #c62828;
+            padding: 15px;
+            margin: 15px 0;
+            color: #b71c1c;
+            font-size: 14px;
+            border-radius: 0 4px 4px 0;
+        }
+        .ui-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        .ui-table th, .ui-table td {
+            border: 1px solid var(--border);
+            padding: 12px;
+            text-align: left;
+        }
+        .ui-table th {
+            background: #f5f5f5;
+            color: #555;
+            font-weight: 600;
+        }
+        .ui-table tr:hover {
+            background: #f9f9f9;
+        }
+        .highlight-red { color: var(--critical); font-weight: bold; }
+        .highlight-green { color: var(--minor); font-weight: bold; }
+        .highlight-orange { color: var(--major); font-weight: bold; }
+        .highlight-blue { color: var(--info); font-weight: bold; }
+        
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .flex-col {
+            flex: 1;
+            min-width: 200px;
+        }
+        .kpi-card {
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .kpi-card p { margin: 0; }
+        .kpi-card .kpi-label { font-size: 12px; opacity: 0.8; }
+        .kpi-card .kpi-value { font-size: 22px; font-weight: bold; margin-top: 5px; }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #d32f2f;
+        }
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            margin: 15px 0;
+        }
+        .code-block .comment { color: #6a9955; }
+        .code-block .keyword { color: #569cd6; }
+        .code-block .string { color: #ce9178; }
+        .code-block .function { color: #dcdcaa; }
+        
+        hr {
+            margin: 40px 0;
+            border: 0;
+            border-top: 1px solid var(--border);
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .toc li {
+            margin-bottom: 8px;
+        }
+        .toc a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        .toc .toc-sub {
+            padding-left: 20px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ========================================== -->
+    <!-- EN-TÊTE                                    -->
+    <!-- ========================================== -->
+    <h1>📋 Rapport Exhaustif UI/UX & Correctifs</h1>
+    <p class="subtitle"><strong>Application :</strong> LJERE360 (Modules : Facturation, Ventes, Caisse, Rapports, Importation)</p>
+    <p class="subtitle"><strong>Destinataire :</strong> Équipe de Développement Frontend & Backend</p>
+    <p class="subtitle"><strong>Objectif :</strong> Ce document centralise l'ensemble des anomalies, incohérences et recommandations ergonomiques identifiées lors des tests fonctionnels. Il vise à guider les corrections pour assurer la cohésion du flux de données et améliorer l'expérience utilisateur.</p>
+
+    <!-- ========================================== -->
+    <!-- TABLE DES MATIÈRES                         -->
+    <!-- ========================================== -->
+    <div class="toc">
+        <h3 style="margin-top: 0;">📑 Table des matières</h3>
+        <ul>
+            <li><a href="#section1">1. Problèmes Critiques de Flux de Données (Data Flow)</a>
+                <ul class="toc-sub">
+                    <li><a href="#section1-1">1.1. Absence de liaison entre Ventes, Encaissements et Rapports</a></li>
+                    <li><a href="#section1-2">1.2. Incident Technique Bloquant (261002-A20674)</a></li>
+                    <li><a href="#section1-3">1.3. Statut des Factures non propagé</a></li>
+                </ul>
+            </li>
+            <li><a href="#section2">2. Logique Métier et Cohérence des Données</a>
+                <ul class="toc-sub">
+                    <li><a href="#section2-1">2.1. Confusion entre Chiffre d'Affaires et Encaissements</a></li>
+                    <li><a href="#section2-2">2.2. Absence de liaison automatique à un employé</a></li>
+                    <li><a href="#section2-3">2.3. Gestion des acomptes et retenues à la source</a></li>
+                </ul>
+            </li>
+            <li><a href="#section3">3. Ergonomie et Interface Utilisateur (UI/UX)</a>
+                <ul class="toc-sub">
+                    <li><a href="#section3-1">3.1. Absence de modèle (Template) pour l'importation</a></li>
+                    <li><a href="#section3-2">3.2. Limitations techniques de l'import Excel (Première feuille)</a></li>
+                    <li><a href="#section3-3">3.3. Boutons inactifs et absence de retours utilisateur</a></li>
+                    <li><a href="#section3-4">3.4. Clarté des états vides (Empty States)</a></li>
+                    <li><a href="#section3-5">3.5. Hiérarchie visuelle et surcharge d'informations</a></li>
+                </ul>
+            </li>
+            <li><a href="#section4">4. Gestion des Erreurs et Résilience</a>
+                <ul class="toc-sub">
+                    <li><a href="#section4-1">4.1. Page d'erreur technique</a></li>
+                    <li><a href="#section4-2">4.2. Validation des formulaires</a></li>
+                </ul>
+            </li>
+            <li><a href="#section5">5. Résumé des Actions Prioritaires</a></li>
+        </ul>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECTION 1 : PROBLÈMES CRITIQUES DE FLUX    -->
+    <!-- ========================================== -->
+    <h2 id="section1">1. Problèmes Critiques de Flux de Données (Data Flow)</h2>
+
+    <div class="card" id="section1-1">
+        <span class="badge badge-critical">Bloquant</span>
+        <h3>1.1. Absence de liaison entre Ventes, Encaissements et Rapports</h3>
+        <p><strong>Problème constaté :</strong> Les ventes saisies avec des recouvrements partiels n'apparaissent pas dans les écrans de rapports ("Mes chiffres", "Tous les rapports") ni dans l'historique des ventes. La page "Vente" semble ne pas fonctionner.</p>
+        <p><strong>Impact utilisateur :</strong> L'utilisateur ne peut pas suivre son activité. Le chiffre d'affaires n'est pas mis à jour, les créances ne sont pas visibles. L'application est inutilisable pour la gestion quotidienne.</p>
+        
+        <p><strong>Recommandation technique :</strong></p>
+        <ul>
+            <li>Vérifier la <strong>persistance en base de données</strong> : La vente est-elle bien enregistrée avec le statut "Validée" et non "Brouillon" ?</li>
+            <li>Vérifier la <strong>logique de filtrage</strong> des rapports : Les filtres de date ou de statut n'excluent-ils pas les ventes récentes ?</li>
+            <li>Corriger l'<strong>Incident Technique 261002-A20674</strong> qui bloque probablement le processus de validation.</li>
+            <li>Mettre en place un <strong>système de logs</strong> pour tracer le cycle de vie d'une vente (création, validation, encaissement, annulation).</li>
+        </ul>
+
+        <div class="ui-sim">
+            <div class="ui-sim-header">Simulation de l'état attendu après correction</div>
+            <p style="font-size: 13px; color: #777;">Ce tableau doit afficher les ventes saisies, avec leur statut de paiement.</p>
+            <table class="ui-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>N° Facture</th>
+                        <th>Client</th>
+                        <th>Total HTG</th>
+                        <th>Déjà payé</th>
+                        <th>Balance</th>
+                        <th>Statut</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>02/10/2026</td>
+                        <td>FAC-2026-0001</td>
+                        <td>Yves Janvier</td>
+                        <td>120,00</td>
+                        <td class="highlight-green">90,00</td>
+                        <td class="highlight-orange">30,00</td>
+                        <td><span style="background:#fff3e0; color:#ef6c00; padding:4px 8px; border-radius:4px; font-size:12px;">Partiellement payée</span></td>
+                        <td><button class="ui-btn-outline" style="padding:4px 10px; font-size:12px;">Voir</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="font-size: 12px; color: var(--critical); margin-top: 10px;"><em>⚠️ Actuellement, ce tableau est vide car les données ne remontent pas.</em></p>
+        </div>
+        
+        <div class="code-block">
+            <span class="comment">// Exemple de logique backend à vérifier (pseudo-code)</span><br>
+            <span class="keyword">function</span> <span class="function">getSalesReport</span>(dateDebut, dateFin) {<br>
+            &nbsp;&nbsp;<span class="comment">// 1. Récupérer les factures avec statut 'validee'</span><br>
+            &nbsp;&nbsp;<span class="keyword">const</span> factures = db.factures.find({ <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;date: { $gte: dateDebut, $lte: dateFin },<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;statut: <span class="string">'validee'</span> <span class="comment">// <-- Vérifier que ce filtre est correct</span><br>
+            &nbsp;&nbsp;});<br>
+            &nbsp;&nbsp;<span class="comment">// 2. Calculer le CA total (somme des totaux)</span><br>
+            &nbsp;&nbsp;<span class="keyword">const</span> caTotal = factures.reduce((sum, f) => sum + f.total, 0);<br>
+            &nbsp;&nbsp;<span class="comment">// 3. Calculer le total encaissé (somme des paiements)</span><br>
+            &nbsp;&nbsp;<span class="keyword">const</span> encaisse = factures.reduce((sum, f) => sum + f.montantPaye, 0);<br>
+            &nbsp;&nbsp;<span class="keyword">return</span> { caTotal, encaisse, balance: caTotal - encaisse };<br>
+            }
+        </div>
+    </div>
+
+    <div class="card" id="section1-2">
+        <span class="badge badge-critical">Bloquant</span>
+        <h3>1.2. Incident Technique Bloquant (261002-A20674)</h3>
+        <p><strong>Problème constaté :</strong> La page "Vente" plante et affiche une page d'erreur technique avec le numéro d'incident <code>261002-A20674</code>.</p>
+        <p><strong>Impact utilisateur :</strong> Blocage total du processus de vente. L'utilisateur ne peut pas finaliser ses transactions.</p>
+        
+        <p><strong>Recommandation technique :</strong></p>
+        <ul>
+            <li>Analyser les logs serveur pour ce numéro d'incident. Le code d'erreur doit être tracé avec la stack trace complète.</li>
+            <li>Corriger le bug sous-jacent (probablement une erreur de type <code>undefined</code> ou une violation de contrainte en base de données).</li>
+            <li>Mettre en place un <strong>monitoring</strong> (Sentry, LogRocket, ou équivalent) pour détecter les erreurs en temps réel.</li>
+        </ul>
+
+        <div class="ui-sim">
+            <div class="ui-sim-header">Simulation de la page d'erreur (à conserver mais à améliorer)</div>
+            <div class="ui-alert-danger">
+                <strong>Incident technique</strong><br>
+                Cette page n'a pas pu s'afficher. L'incident a été enregistré et le service informatique peut le retrouver.<br><br>
+                <strong>Numéro de l'incident :</strong> <span class="highlight-red">261002-A20674</span><br><br>
+                Rechargez la page. Si le problème persiste, communiquez ce numéro au service informatique.<br><br>
+                <a href="#" style="color: var(--secondary);">← Retour à l'accueil</a>
+            </div>
+            <p style="font-size: 12px; color: #777; margin-top: 10px;"><em>Recommandation : Ajouter un bouton "Signaler le problème" qui pré-remplit un email avec le numéro d'incident et les actions effectuées avant le plantage.</em></p>
+        </div>
+    </div>
+
+    <div class="card" id="section1-3">
+        <span class="badge badge-major">Majeur</span>
+        <h3>1.3. Statut des Factures non propagé</h3>
+        <p><strong>Problème constaté :</strong> Une facture créée en "Brouillon" ne passe jamais au statut "Validée" ou "Payée" après encaissement. Elle reste invisible dans les rapports.</p>
+        <p><strong>Impact utilisateur :</strong> Le cycle de vie de la facture est rompu. L'utilisateur ne sait pas si sa facture est prise en compte.</p>
+        
+        <p><strong>Recommandation technique :</strong></p>
+        <ul>
+            <li>Implémenter une <strong>machine à états</strong> pour les factures : <code>Brouillon → Validée → Partiellement payée → Payée → Annulée</code>.</li>
+            <li>Chaque transition doit déclencher les mises à jour nécessaires (CA, encaissements, créances).</li>
+            <li>Afficher clairement le statut dans l'interface (badge de couleur).</li>
+        </ul>
+
+        <div class="ui-sim">
+            <div class="ui-sim-header">Simulation des badges de statut</div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <span style="background:#e0e0e0; color:#555; padding:6px 12px; border-radius:20px; font-size:12px;">Brouillon</span>
+                <span style="background:#e1f5fe; color:#0277bd; padding:6px 12px; border-radius:20px; font-size:12px;">Validée</span>
+                <span style="background:#fff3e0; color:#ef6c00; padding:6px 12px; border-radius:20px; font-size:12px;">Partiellement payée</span>
+                <span style="background:#e8f5e9; color:#2e7d32; padding:6px 12px; border-radius:20px; font-size:12px;">Payée</span>
+                <span style="background:#ffebee; color:#c62828; padding:6px 12px; border-radius:20px; font-size:12px;">Annulée</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECTION 2 : LOGIQUE MÉTIER                 -->
+    <!-- ========================================== -->
+    <h2 id="section2">2. Logique Métier et Cohérence des Données</h2>
+
+    <div class="card" id="section2-1">
+        <span class="badge badge-major">Majeur</span>
+        <h3>2.1. Confusion entre Chiffre d'Affaires et Encaissements</h3>
+        <p><strong>Problème constaté :</strong> Le tableau de bord "Facturation & Devis" affiche uniquement les encaissements et les dus, mais pas le Chiffre d'Affaires global (CA).</p>
+        <p><strong>Impact utilisateur :</strong> Un gérant ne peut pas savoir combien il a vendu. Une vente à crédit n'est pas comptabilisée dans le CA, ce qui fausse l'analyse de l'activité.</p>
+        
+        <p><strong>Recommandation technique :</strong></p>
+        <ul>
+            <li>Ajouter une carte <strong>"Chiffre d'Affaires"</strong> dans le tableau de bord, distincte de "Chiffre d'affaires encaissé".</li>
+            <li>Le CA doit être calculé sur la base des factures <strong>validées</strong> (émises), et non uniquement sur les paiements reçus.</li>
+            <li>Ajouter un graphique d'évolution du CA vs Encaissements.</li>
+        </ul>
+
+        <div class="ui-sim">
+            <div class="ui-sim-header">Simulation du tableau de bord corrigé</div>
+            <div class="flex-row">
+                <div class="flex-col kpi-card" style="background: var(--primary); color: #fff;">
+                    <p class="kpi-label">Chiffre d'Affaires (HT)</p>
+                    <p class="kpi-value">1 250,00 HTG</p>
+                </div>
+                <div class="flex-col kpi-card" style="background: #e8eaf6; color: var(--primary);">
+                    <p class="kpi-label">Encaissé</p>
+                    <p class="kpi-value">900,00 HTG</p>
+                </div>
+                <div class="flex-col kpi-card" style="background: #fff3e0; color: #e65100;">
+                    <p class="kpi-label">Reste à recouvrer</p>
+                    <p class="kpi-value">350,00 HTG</p>
+                </div>
+            </div>
+            <p style="font-size: 12px; color: #777; margin-top: 15px;"><em>Le CA est calculé sur les factures validées, indépendamment des encaissements.</em></p>
+        </div>
+    </div>
+
+    <div class="card" id="section2-2">
+        <span class="badge badge-major">Majeur</span>
+        <h3>2.2. Absence de liaison automatique à un employé</h3>
+        <p><strong>Problème constaté :</strong> Lors de la création d'une transaction, aucune liaison n'est faite avec l'employé connecté (le serveur ou caissier).</p>
+        <p><strong>Impact utilisateur :</strong> Impossible de calculer les commissions, de suivre la performance individuelle ("Par serveur"), ou d'assurer la traçabilité en cas d'erreur de caisse.</p>
+        
+        <p><strong>Recommandation technique :</strong></p>
+        <ul>
+            <li>Pré-remplir automatiquement le champ <strong>"Vendeur"</strong> ou <strong>"Employé"</strong> avec l'utilisateur actuellement connecté (ex: Yves Janvier).</li>
+            <li>Le champ doit rester modifiable (pour les cas où un gérant saisit une vente pour un autre employé), mais la valeur par défaut doit être l'utilisateur connecté.</li>
+            <li>Stocker l'ID de l'employé dans la base de données pour chaque transaction.</li>
+        </ul>
+
+        <div class="ui-sim">
+            <div class="ui-sim-header">Simulation du formulaire de vente</div>
+            <label style="font-size: 14px; font-weight: bold;">Vendeur associé :</label>
+            <select style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; background: #fff;">
+                <option selected>Yves Janvier (Connecté)</option>
+                <option>Jean Dupont</option>
+                <option>Marie Claire</option>
+            </select>
+            <p style="font-size: 12px; color: var(--minor); margin-top: 5px;">✅ Ce champ est pré-rempli automatiquement par le système.</p>
+        </div>
+    </div>
+
+    <div class="card" id="section2-3">
+        <span class="badge badge-info">Info</span>
+        <h3>2.3. Gestion des acomptes et retenues à la source</h3>
+        <p><strong>Problème constaté :</strong> L'écran d'encaissement propose un champ "Acompte d'impôt retenu (2,00 % sur prestations)" mais son fonctionnement n'est pas clair.</p>
+        <p><strong>Impact utilisateur :</strong> Risque d'erreur de calcul et de mauvaise comptabilisation des retenues fiscales.</p>
+        
+        <p><strong>Recommandation technique :</strong></p>
+        <ul>
+            <li>Ajouter une infobulle explicative : "Montant retenu à la source par le client. Ce montant est déduit du total à payer."</li>
+            <li>Calculer automatiquement l'acompte en fonction du taux (2%) et du montant HT.</li>
+            <li>Afficher clairement le récapitulatif : Total HT → Acompte → Net à payer.</li>
+        </ul>
+
+        <div class="ui-sim">
+            <div class="ui-sim-header">Simulation du calcul d'acompte</div>
+            <table class="ui-table">
+                <tr><td>Total HT</td><td style="text-align: right;">1 000,00 HTG</td></tr>
+                <tr><td>Acompte d'impôt (2%)</td><td style="text-align: right; color: var(--major);">- 20,00 HTG</td></tr>
+                <tr style="font-weight: bold; background: #f5f5f5;"><td>Net à payer</td><td style="text-align: right;">980,00 HTG</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECTION 3 : ERGONOMIE ET UI/UX             -->
+    <!-- ========================================== -->
+    <h2 id="section3">3. Ergonomie et Interface Utilisateur (UI/UX)</h2>
+
+    <div class="card" id="section3-1">
+        <span class="badge badge-major">Majeur</span>
+        <h3>3.1. Absence de modèle (Template) pour l'importation</h3>
+        <p><strong>Problème constaté :</strong> Sur l'écran "Importer des employés" (et probablement "Importer des articles"), aucun modèle Excel/CSV n'est téléchargeable. L'utilisateur doit deviner la structure du fichier.</p>
+        <p><strong>Impact utilisateur :</strong> Risque élevé d'erreurs de format, frustration, et échec de l'importation.</p>
+        
+        <p><strong>Recommandation technique :</strong></p>
+        <ul>
+            <li>Ajouter un bouton <strong>"Télécharger le modèle"</strong> à l'étape 1 de l'assistant d'importation.</li>
+            <li>Le fichier modèle doit contenir les en-têtes exacts attendus par l'application (Code-barres, Désignation, Catégorie, Prix, etc.) et une ligne d'exemple.</li>
+            <li>Proposer deux formats : Excel (.xlsx) et CSV (.csv).</li>
+        </ul>
+
+        <div class="ui-sim" style="text-align: center; padding: 30px; border: 2px dashed #cfd8dc; border-radius: 8px;">
+            <p style="color: #777; margin-bottom: 15px;">Déposez votre fichier ici ou choisissez un fichier.</p>
+            <button class="ui-btn">Choisir un fichier</button>
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                <p style="font-size: 13px; color: #777; margin-bottom: 10px;">Pas encore de fichier ? Téléchargez notre modèle :</p>
+                <button class="ui-btn-outline" style="border-color: #4caf50; color: #4caf50; margin-right: 10px;">📥 Modèle Excel (.xlsx)</button>
+                <button class="ui-btn-outline" style="border-color: #4caf50; color: #4caf50;">📥 Modèle CSV (.csv)</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" id="section3-2">
+        <span class="badge badge-minor">Mineur</span>
+        <h3>3.2. Limitations techniques de l'import Excel (Première feuille)</h3>
+        <p><strong>Problème constaté :</strong> L'application lit uniquement la première feuille d'un classeur Excel. Si l'utilisateur a ses données sur un autre onglet, l'import échoue.</p>
+        <p><strong>Impact utilisateur :</strong> Perte de temps, obligation de manipuler le fichier Excel avant l'import.</p>
+        
+        <p><strong>Recommandation technique :</strong></p>
+        <ul>
+            <li>Permettre à l'utilisateur de <strong>choisir l'onglet</strong> à importer via un menu déroulant après le chargement du fichier.</li>
+            <li>Si cela n'est pas possible techniquement, afficher un message d'avertissement très visible : "Seule la première feuille du classeur sera lue."</li>
+        </ul>
+
+        <div class="ui-sim">
+            <div class="ui-sim-header">Simulation du sélecteur d'onglet</div>
+            <label style="font-size: 14px; font-weight: bold;">Feuille à importer :</label>
+            <select style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                <option>Feuille 1 (Employés)</option>
+                <option>Feuille 2 (Anciens employés)</option>
+                <option>Feuille 3 (Contacts)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="card" id="section3-3">
+        <span class="badge badge-critical">Bloquant</span>
+        <h3>3.3. Boutons inactifs et absence de retours utilisateur</h3>
+        <p><strong>Problème constaté :</strong> Les boutons de la section "MES CHIFFRES" (Rapport du jour, Alertes de caisse, etc.) ne déclenchent aucune action. Aucun message d'erreur, aucune redirection.</p>
+        <p><strong>Impact utilisateur :</strong> L'utilisateur clique, rien ne se passe. Il ne sait pas si le bouton est cassé, si la fonctionnalité n'existe pas, ou s'il n'a pas les droits.</p>
+        
+        <p><strong>Recommandation technique :</strong></p>
+        <ul>
+            <li>Si une fonctionnalité n'est pas encore disponible, le bouton doit être <strong>désactivé (grisé)</strong> avec une infobulle "Fonctionnalité à venir".</li>
+            <li>S'il est actif, il doit <strong>rediriger</strong> vers l'écran correspondant ou afficher un <strong>message d'erreur clair</strong> (ex: "Vous n'avez pas les droits pour accéder à ce rapport").</li>
+            <li>Ajouter un <strong>loader</strong> (indicateur de chargement) pendant la redirection.</li>
+        </ul>
+
+        <div class="ui-sim">
+            <div class="ui-sim-header">Simulation des états de bouton</div>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <div>
+                    <button class="ui-btn" style="background: #ccc; cursor: not-allowed;" disabled>Rapport du jour</button>
+                    <p style="font-size: 11px; color: #999; text-align: center; margin-top: 5px;">Désactivé (à venir)</p>
+                </div>
+                <div>
+                    <button class="ui-btn">Alertes de caisse</button>
+                    <p style="font-size: 11px; color: var(--minor); text-align: center; margin-top: 5px;">Actif (redirige)</p>
+                </div>
+                <div>
+                    <button class="ui-btn" style="background: #c62828;">Export comptable</button>
+                    <p style="font-size: 11px; color: var(--critical); text-align: center; margin-top: 5px;">Erreur (droits insuffisants)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" id="section3-4">
+        <span class="badge badge-minor">Mineur</span>
+        <h3>3.4. Clarté des états vides (Empty States)</h3>
+        <p><strong>Problème constaté :</strong> Les écrans vides (ex: "Aucune table enregistrée", "Rien à montrer sur cette période") sont bien gérés, mais ils masquent parfois des bugs de flux de données.</p>
+        <p><strong>Impact utilisateur :</strong> L'utilisateur ne sait pas si l'écran est vide parce qu'il n'y a pas de données, ou parce qu'il y a un bug.</p>
+        
+        <p><strong>Recommandation technique :</strong></p>
+        <ul>
+            <li>Différencier les messages : "Aucune donnée pour cette période" (normal) vs "Erreur de chargement des données" (bug).</li>
+            <li>Ajouter un bouton <strong>"Réessayer"</strong> ou <strong>"Actualiser"</strong> sur les écrans vides.</li>
+            <li>Pour les écrans vides "normaux", ajouter un lien vers l'action à effectuer (ex: "Créer une table", "Créer une vente").</li>
+        </ul>
+
+        <div class="ui-sim">
+            <div class="ui-sim-header">Simulation d'un état vide amélioré</div>
+            <div style="text-align: center; padding: 30px; color: #777;">
+                <p style="font-size: 40px; margin: 0;">📊</p>
+                <p style="font-size: 16px; font-weight: bold; color: #555;">Aucune vente sur cette période</p>
+                <p style="font-size: 13px;">Les ventes apparaîtront ici une fois que vous aurez créé des factures.</p>
+                <button class="ui-btn" style="margin-top: 10px;">Créer une nouvelle vente</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" id="section3-5">
+        <span class="badge badge-info">Info</span>
+        <h3>3.5. Hiérarchie visuelle et surcharge d'informations</h3>
+        <p><strong>Problème constaté :</strong> Le tableau de bord "Facturation & Devis" contient beaucoup de boutons (plus de 25). Cela peut être overwhelming pour un nouvel utilisateur.</p>
+        <p><strong>Impact utilisateur :</strong> Difficulté à trouver l'information ou l'action recherchée.</p>
+        
+        <p><strong>Recommandation technique :</strong></p>
+        <ul>
+            <li>Regrouper les boutons par <strong>catégories fonctionnelles</strong> (Vendre, Encaisser, Gérer, Analyser).</li>
+            <li>Utiliser des <strong>onglets</strong> ou des <strong>accordéons</strong> pour masquer les sections moins utilisées.</li>
+            <li>Mettre en avant les actions principales (Nouvelle facture, Nouveau devis) avec des boutons plus gros et plus visibles.</li>
+            <li>Ajouter une <strong>barre de recherche</strong> pour trouver rapidement un écran ou une fonctionnalité.</li>
+        </ul>
+
+        <div class="ui-sim">
+            <div class="ui-sim-header">Simulation d'une organisation par onglets</div>
+            <div style="display: flex; border-bottom: 2px solid #eee; margin-bottom: 15px;">
+                <div style="padding: 10px 20px; border-bottom: 3px solid var(--secondary); font-weight: bold; color: var(--secondary);">Vendre</div>
+                <div style="padding: 10px 20px; color: #777;">Encaisser</div>
+                <div style="padding: 10px 20px; color: #777;">Gérer</div>
+                <div style="padding: 10px 20px; color: #777;">Analyser</div>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="ui-btn">Nouvelle facture</button>
+                <button class="ui-btn-outline">Nouveau devis</button>
+                <button class="ui-btn-outline">Vendre</button>
+                <button class="ui-btn-outline">Salle</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECTION 4 : GESTION DES ERREURS            -->
+    <!-- ========================================== -->
+    <h2 id="section4">4. Gestion des Erreurs et Résilience</h2>
+
+    <div class="card" id="section4-1">
+        <span class="badge badge-critical">Bloquant</span>
+        <h3>4.1. Page d'erreur technique</h3>
+        <p><strong>Problème constaté :</strong> La page d'erreur technique est bien conçue (message clair, numéro de ticket), mais elle ne doit pas être une solution permanente.</p>
+        <p><strong>Recommandation technique :</strong></p>
+        <ul>
+            <li>Corriger les bugs sous-jacents qui déclenchent cette page.</li>
+            <li>Ajouter un bouton <strong>"Signaler le problème"</strong> qui pré-remplit un email avec le numéro d'incident et les actions effectuées avant le plantage.</li>
+            <li>Mettre en place un <strong>système de notification</strong> pour prévenir l'équipe technique en temps réel.</li>
+        </ul>
+    </div>
+
+    <div class="card" id="section4-2">
+        <span class="badge badge-major">Majeur</span>
+        <h3>4.2. Validation des formulaires</h3>
+        <p><strong>Problème constaté :</strong> Certains formulaires (ex: création de client, création d'article) ne valident pas correctement les données saisies.</p>
+        <p><strong>Impact utilisateur :</strong> Risque de données incorrectes en base, erreurs de calcul, et frustration.</p>
+        
+        <p><strong>Recommandation technique :</strong></p>
+        <ul>
+            <li>Ajouter des <strong>validations en temps réel</strong> (ex: email valide, numéro de téléphone valide, montant positif).</li>
+            <li>Afficher les erreurs <strong>sous le champ concerné</strong> avec un texte en rouge.</li>
+            <li>Désactiver le bouton de soumission tant que le formulaire n'est pas valide.</li>
+            <li>Ajouter des <strong>infobulles</strong> pour expliquer les formats attendus.</li>
+        </ul>
+
+        <div class="ui-sim">
+            <div class="ui-sim-header">Simulation d'un formulaire avec validation</div>
+            <label style="font-size: 14px; font-weight: bold;">Email du client :</label>
+            <input type="email" value="email-invalide" style="width: 100%; padding: 10px; margin-top: 5px; border: 2px solid var(--critical); border-radius: 4px; background: #fff;">
+            <p style="font-size: 12px; color: var(--critical); margin-top: 5px;">Veuillez saisir une adresse email valide (ex: nom@domaine.com).</p>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECTION 5 : RÉSUMÉ                         -->
+    <!-- ========================================== -->
+    <h2 id="section5">5. Résumé des Actions Prioritaires</h2>
+
+    <div class="card" style="background: #e8eaf6; border-left: 5px solid var(--primary);">
+        <ol style="font-size: 16px; line-height: 2;">
+            <li><strong>Corriger l'incident technique</strong> (261002-A20674) pour débloquer la page Vente.</li>
+            <li><strong>Rétablir le flux de données</strong> : Ventes → Encaissements → Rapports. Vérifier la persistance et les filtres.</li>
+            <li><strong>Ajouter le calcul du Chiffre d'Affaires</strong> (distinct des encaissements) dans le tableau de bord.</li>
+            <li><strong>Lier automatiquement les transactions à l'employé connecté.</strong></li>
+            <li><strong>Ajouter un modèle téléchargeable</strong> pour les imports Excel/CSV.</li>
+            <li><strong>Corriger les boutons inactifs</strong> de la section "MES CHIFFRES" (désactivation ou redirection).</li>
+            <li><strong>Améliorer la validation des formulaires</strong> et la gestion des erreurs.</li>
+            <li><strong>Organiser le tableau de bord</strong> par onglets ou catégories pour réduire la surcharge visuelle.</li>
+        </ol>
+    </div>
+
+    <hr>
+
+    <p style="margin-top: 30px; font-size: 14px; color: #777; text-align: center;">
+        Document généré par le Testeur Fonctionnel - LJERE360<br>
+        Version 1.0 - 02 Octobre 2026
+    </p>
+
+</div>
+
+</body>
+</html>
